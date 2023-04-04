@@ -25,6 +25,7 @@ Set-ItemProperty -Path "$NewRegPath\$item" -Name "EnableFirewall" -Value 1 -Forc
 Set-ItemProperty -Path "$NewRegPath\$item" -Name "DefaultInboundAction" -Value 1 -Force
 Set-ItemProperty -Path "$NewRegPath\$item" -Name "DefaultOutboundAction" -Value 1 -Force
 }
+cmd /c "netsh firewall set logging C:\fwlogs.txt 32767 ENABLE ENABLE"
 
 #GP Local Lock
 $GPORegPath = "HKCU:\Software\Policies\Microsoft\MMC"
