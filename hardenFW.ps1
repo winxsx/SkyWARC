@@ -4,7 +4,14 @@ if (-not $IsAdmin) {
     Write-Host "Please run this script as an Administrator." 
     exit
 }
+#FW rules backup
+$OutputFilePath = "FirewallRulesBackup.txt"
+Get-NetFirewallRule | Export-Clixml -Path $OutputFilePath
+Get-NetFirewallRule | Remove-NetFirewallRule
+Write-Host "Current firewall rules have been saved to $OutputFilePath"
 
+# Display a message indicating the successful completion of the script
+Write-Host "Current firewall rules have been saved to $OutputFilePath and deleted."
 $RegPath = "HKLM:\SOFTWARE\Policies\Microsoft"
 $key = "WindowsFirewall"
 $keyD = "DomainProfile"

@@ -1,9 +1,11 @@
-$psexecPath = "C:\Users\Administrator\Downloads\PsExec.exe"
+$psexecPath = "C:\Users\Administrator\Downloads\paexec.exe"
 $targetIPs = Get-Content "C:\Users\Administrator\Downloads\targets.txt"
 $u1 = Read-Host "Enter the 1st batch of usernames"
 $p1 = Read-Host "Enter the password for $u1"
 $u2 = Read-Host "Enter the 2nd batch of usernames"
-$p2 = Read-Host "Enter the passworf for $u2"
+$p2 = Read-Host "Enter the password for $u2"
+$u3 = Read-Host "Enter the 3rd batch of usernames"
+$p3 = Read-Host "Enter the password for $u3"
 
 $credentials = @{
     "c1" = @{
@@ -14,23 +16,23 @@ $credentials = @{
         "Username" = $u2;
         "Password" = $p2
     }
+    "c3" = @{
+        "Username" = $u3;
+        "Password" = $p3
+    }
 }
 
 
 foreach ($ip in $targetIPs) {
-    $selectedCredential = Read-Host "Enter the credential name (c1 or c2) for IP $ip"
+    $selectedCredential = Read-Host "Enter the credential name (c1,c2,c3) for IP $ip"
 
     if ($credentials.ContainsKey($selectedCredential)) {
         $username = $credentials[$selectedCredential]["Username"]
-        $password = $credentials[$selectedCredential]["Password"]
-
-        & $psexecPath \\$ip -u $username -p $password -e -s powershell Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol -NoRestart
-        & $psexecPath \\$ip -u $username -p $password -e -s powershell Set-SmbServerConfiguration -EnableSMB1Protocol 0 -Force
-        & $psexecPath \\$ip -u $username -p $password -e -s powershell Set-SmbServerConfiguration -EnableSMB2Protocol 1 -Force
-        & $psexecPath \\$ip -u $username -p $password -e -s powershell Set-ItemProperty -Path `"HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters`" SMB2 -Type DWORD -Value 1 -Force
-        & $psexecPath \\$ip -u $username -p $password -e -s cmd sc.exe config lanmanworkstation depend= bowser/mrxsmb20/nsi 
-        & $psexecPath \\$ip -u $username -p $password -e -s cmd sc.exe config mrxsmb10 start= disabled
-        & $psexecPath \\$ip -u $username -p $password -e -s powershell Set-ExecutionPolicy -ExecutionPolicy Unrestricted
-        & $psexecPath \\$ip -u $username -p $password -s -c -f C:\Users\Administrator\Downloads\hardenFW.ps1
+        $password = $credentials[$selectedCredential]["Password"]     
     }
+    & $psexecPath \\$ip -u $username -p $password -c -d -f C:\Users\Administrator\Downloads\init.ps1 -lo C:\lol.log
+    & $psexecPath \\$ip -u $username -p $password -c -d -f C:\Users\Administrator\Downloads\hardenFW.ps1 -lo C:\lol.log
+    & $psexecPath \\$ip -u $username -p $password -h -s -d powershell.exe -ExecutionPolicy Bypass -File "C:\Users\Administrator\Downloads\init.ps1" -lo C:\lol.log
+    & $psexecPath \\$ip -u $username -p $password -h -s -d powershell.exe -ExecutionPolicy Bypass -File "C:\Users\Administrator\Downloads\hardenFW.ps1" -lo C:\lol.log
+
 }
