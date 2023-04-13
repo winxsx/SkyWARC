@@ -9,6 +9,7 @@ $OutputFilePath = "FirewallRulesBackup.txt"
 Get-NetFirewallRule | Export-Clixml -Path $OutputFilePath
 Get-NetFirewallRule | Remove-NetFirewallRule
 Write-Host "Current firewall rules have been saved to $OutputFilePath"
+#write fw rules
 cmd /c "netsh advfirewall firewall add rule name=LDAP dir=in action=allow protocol=TCP localport=389"
 cmd /c "netsh advfirewall firewall add rule name=SMTP dir=in action=allow protocol=TCP localport=25"
 cmd /c "netsh advfirewall firewall add rule name=POP3 dir=in action=allow protocol=TCP localport=110"
