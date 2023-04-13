@@ -1,6 +1,6 @@
 
 #change pass
-net user Administrator Password123!
+net user Administrator 6969bingbong!
 
 #disable SMBv1
 $osVersion = (Get-WmiObject -Class Win32_OperatingSystem).Version

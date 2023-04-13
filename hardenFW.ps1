@@ -9,6 +9,26 @@ $OutputFilePath = "FirewallRulesBackup.txt"
 Get-NetFirewallRule | Export-Clixml -Path $OutputFilePath
 Get-NetFirewallRule | Remove-NetFirewallRule
 Write-Host "Current firewall rules have been saved to $OutputFilePath"
+cmd /c "netsh advfirewall firewall add rule name=LDAP dir=in action=allow protocol=TCP localport=389"
+cmd /c "netsh advfirewall firewall add rule name=SMTP dir=in action=allow protocol=TCP localport=25"
+cmd /c "netsh advfirewall firewall add rule name=POP3 dir=in action=allow protocol=TCP localport=110"
+cmd /c "netsh advfirewall firewall add rule name=HTTP dir=in action=allow protocol=TCP localport=80"
+cmd /c "netsh advfirewall firewall add rule name=HTTPS dir=in action=allow protocol=TCP localport=443"
+cmd /c "netsh advfirewall firewall add rule name=LDAP dir=in action=allow protocol=TCP localport=389"
+cmd /c "netsh advfirewall firewall add rule name=localhost dir=in action=allow remoteip=127.0.0.0/8"
+cmd /c "netsh advfirewall firewall add rule name=LAN dir=in action=allow remoteip=10.30.30.0/22"
+cmd /c "netsh advfirewall firewall add rule name=IMAP dir=in action=allow protocol=TCP localport=143"
+cmd /c "netsh advfirewall firewall add rule name=FTP dir=in action=allow protocol=TCP localport=21"
+cmd /c "netsh advfirewall firewall add rule name=FTP-Passive dir=in action=allow protocol=TCP localport=20"
+cmd /c "netsh advfirewall firewall add rule name=DNS dir=in action=allow protocol=UDP localport=53"
+cmd /c "netsh advfirewall firewall add rule name=Kerberos dir=in action=allow protocol=TCP localport=88"
+
+cmd /c "netsh advfirewall firewall add rule name=LAN dir=out action=allow remoteip=10.30.30.0/22"
+cmd /c "netsh advfirewall firewall add rule name=localhost dir=out action=allow remoteip=127.0.0.0/8"
+cmd /c "netsh advfirewall firewall add rule name=DNS dir=out action=allow protocol=UDP remoteport=53 remoteip=9.9.9.9"
+
+
+
 
 # Display a message indicating the successful completion of the script
 Write-Host "Current firewall rules have been saved to $OutputFilePath and deleted."
