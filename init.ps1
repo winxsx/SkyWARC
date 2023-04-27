@@ -24,9 +24,6 @@ schtasks /query /V /FO CSV > C:/users/administrator/desktop/tasks.txt
 schtasks /create /tn "Stop Schedule" /tr "powershell.exe net stop Schedule" /ru SYSTEM /sc ONCE /st 00:00 /f /rl HIGHEST
 schtasks /run /tn "Stop Schedule"
 reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Schedule /v Start /t reg_dword /d 4 /f
-#stop rdp
-net stop TermService
-net stop Spooler
 
 #set logging
 auditpol /set /category:* /success:enable
